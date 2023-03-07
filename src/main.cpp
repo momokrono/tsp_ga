@@ -6,6 +6,7 @@
 #include <spl/primitive.hpp>
 
 #include "population.hpp"
+#include "thread_pool.hpp"
 
 namespace sgl = spl::graphics;
 
@@ -65,10 +66,8 @@ int main() {
 
     // lambda used when saving to image
     auto save_states = [&](uint start, uint stop) {
-        auto image = sgl::image(image_size, image_size);
-        image.fill(sgl::color::white);
+        auto image = sgl::image(image_size, image_size, sgl::color::white);
         for (auto gen = start; gen < stop; ++gen) {
-            image.fill(sgl::color::white);
             const auto genes = best_of_generation[gen].get_genes();
             for (auto i = 1u; i < genes.size(); ++i) {
                 const auto from = genes[i].get_coords();
@@ -94,6 +93,7 @@ int main() {
             }
 
             image.save_to_file(fmt::format("outs/generation_{:04}.jpg", gen));
+            image.fill(sgl::color::white);
         }
     };
 
@@ -108,9 +108,9 @@ int main() {
         save_states(start, stop);
     };
 
-    auto workers = std::vector<std::thread>{};
+    auto workers = std::vector<thread_pool::task_handler>{};
 
-    for (auto w = 0u; w < num_of_threads; ++w) { workers.emplace_back(compute, w); }
+    for (auto w = 0u; w < num_of_threads; ++w) { workers.emplace_back(thread_pool.schedule(compute, w)); }
     for (auto & w : workers) { w.join(); }
 
     // in case we do not define the number of generations as multiple of the thead count, we need to check if

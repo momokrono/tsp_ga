@@ -1,7 +1,7 @@
 #include "city.hpp"
 #include <cmath>
 
-City::City(double x, double y): _coords{x, y} { }
+City::City(int x, int y): _coords{x, y} { }
 
 auto City::distance(City to) const -> double
 {
@@ -9,10 +9,10 @@ auto City::distance(City to) const -> double
     auto [xf, yf] = _coords;
     xf -= xt;
     yf -= yt;
-    return std::sqrt(xf * xf + yf * yf);
+    return xf * xf + yf * yf ;
 }
 
-auto City::get_coords() const -> std::pair<double, double>
+auto City::get_coords() const -> std::pair<int, int>
 {
     return _coords;
 }

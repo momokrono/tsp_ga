@@ -2,10 +2,10 @@
 #include "fmt/core.h"
 
 
-Genome::Genome(std::vector<City> genes) : _genes{std::move(genes)}, _score{0.} { }
+Genome::Genome(std::vector<City> genes) : _genes{std::move(genes)} { }
 
 
-auto Genome::get_genes() const -> std::vector<City> { return _genes; }
+auto Genome::get_genes() const -> std::vector<City> const & { return _genes; }
 
 
 auto Genome::get_score() const -> double { return _score; }

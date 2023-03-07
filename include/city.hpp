@@ -8,11 +8,11 @@ class City
 {
 public:
     City() = default;
-    City(double x, double y);
+    City(int x, int y);
     [[nodiscard]] auto distance(City to) const -> double;
-    [[nodiscard]] auto get_coords() const -> std::pair<double, double>;
+    [[nodiscard]] auto get_coords() const -> std::pair<int, int>;
 private:
-    std::pair<double, double> _coords;
+    std::pair<int, int> _coords;
 };
 
 #endif
