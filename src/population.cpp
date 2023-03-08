@@ -39,8 +39,7 @@ auto Population::evaluate() -> void
         }
     }
 
-    std::sort(_pop.begin(), _pop.end(),
-              [] (Genome const & first, Genome const & second) { return first.get_score() > second.get_score(); });
+    std::ranges::sort(_pop, std::greater{}, &Genome::get_score);
 }
 
 
