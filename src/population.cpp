@@ -78,8 +78,7 @@ auto Population::evolve(int const num_to_promote, double mutation_ratio) -> void
 
             for (auto const &g: parent_2) {
                 const auto coords = g.get_coords();
-                const auto find = std::find_if(genes.begin(), genes.end(),
-                                         [&coords](City const &c) { return coords == c.get_coords(); });
+                const auto find = std::ranges::find(genes, coords, &City::get_coords);
                 if (find == genes.end()) {
                     genes.push_back(g);
                 }

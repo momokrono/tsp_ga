@@ -14,11 +14,11 @@ namespace sgl = spl::graphics;
 int main() {
     constexpr auto image_size = 1000;
     const auto num_of_threads = std::thread::hardware_concurrency();
-    constexpr auto pop_per_thread = 5000;
+    constexpr auto pop_per_thread = 10000;
     constexpr auto num_of_cities = 100;
-    constexpr auto num_of_generations = 5000;
+    constexpr auto max_num_of_generations = 5000;
     const auto pop_size = num_of_threads * pop_per_thread;
-    constexpr auto check_every_n_gens = 200;
+    constexpr auto check_every_n_gens = 250;
     constexpr auto perc_of_promotions = 0.2;
     constexpr auto mutation_ratio = 0.3;
 
@@ -44,11 +44,11 @@ int main() {
     }
     auto population = Population(initial_genomes);
     auto best_of_generation = std::vector<Genome>{};
-    best_of_generation.reserve(num_of_generations);
+    best_of_generation.reserve(max_num_of_generations);
 
     // evolve
     auto best_for_now = 0.;
-    for ( auto gen = 0; gen < num_of_generations; ++gen ) {
+    for ( auto gen = 0; gen < max_num_of_generations; ++gen ) {
         population.evaluate();
         best_of_generation.emplace_back(population.get_best());
         const auto best_of_gen = best_of_generation[gen].get_score();
@@ -57,7 +57,7 @@ int main() {
             fmt::print("gen {} done, best score is {}\n", gen, best_of_gen);
             if ( best_of_generation[gen].get_score() == best_for_now )
             {
-                fmt::print("pop is now stable, skipping {} generations\n", num_of_generations - gen);
+                fmt::print("pop is now stable, skipping {} generations\n", max_num_of_generations - gen);
                 break;
             }
             best_for_now = best_of_gen;
